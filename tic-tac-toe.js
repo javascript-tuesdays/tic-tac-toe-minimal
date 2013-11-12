@@ -19,29 +19,29 @@ function Board($board) {
 Board.prototype.emptyBoard = function(){
     for (var row=0; row<3; row++) {
         for (var col=0; col<3; col++) {
-            this.setSquare(row,col,'-');
+            this.setSquareValue(row,col,'-');
         }
     }
 };
 
-Board.prototype.setSquare = function(row,col,val){
-    this.getSquare(row,col).text(val);
+Board.prototype.setSquareValue = function(row,col,val){
+    this.getSquareElement(row,col).text(val);
 };
 
-Board.prototype.getSquare = function(row,col){
+Board.prototype.getSquareValue = function(row,col){
+    return this.getSquareElement(row,col).text();
+};
+
+Board.prototype.getSquareElement = function(row,col){
     return this.rows[row][col];
 };
 
 Board.prototype.isEmpty = function(row,col){
-    return this.isElementEmpty( this.getSquare(row,col) );
+    return this.isElementEmpty( this.getSquareElement(row,col) );
 };
 
 Board.prototype.isElementEmpty = function($square){
     return $square.text() == "-";
-};
-
-Board.prototype.contentsOfSquare = function(row,col){
-    return this.getSquare(row,col).text();
 };
 
 Board.prototype.isBoardFull = function(){
@@ -84,7 +84,7 @@ Board.prototype.lookForWinner = function(){
 
 Board.prototype.playerOwnsRow = function(row, mark){
     for (var col=0; col<3; col++){
-        if (this.contentsOfSquare(row,col) != mark) {
+        if (this.getSquareValue(row,col) != mark) {
             return false;
         }
     }
@@ -93,7 +93,7 @@ Board.prototype.playerOwnsRow = function(row, mark){
 
 Board.prototype.playerOwnsColumn = function(col, mark){
     for (var row=0; row<3; row++){
-        if (this.contentsOfSquare(row,col) != mark) {
+        if (this.getSquareValue(row,col) != mark) {
             return false;
         }
     }
@@ -103,7 +103,7 @@ Board.prototype.playerOwnsColumn = function(col, mark){
 Board.prototype.playerOwnsFirstDiagonal = function(mark){
     for (var row=0; row<3; row++){
         var col = row;
-        if (this.contentsOfSquare(row,col) != mark) {
+        if (this.getSquareValue(row,col) != mark) {
             return false;
         }
     }
@@ -113,7 +113,7 @@ Board.prototype.playerOwnsFirstDiagonal = function(mark){
 Board.prototype.playerOwnsSecondDiagonal = function(mark){
     for (var row=0; row<3; row++){
         var col = 2 - row;
-        if (this.contentsOfSquare(row,col) != mark) {
+        if (this.getSquareValue(row,col) != mark) {
             return false;
         }
     }
@@ -181,7 +181,7 @@ function Game() {
                 }
             }
             console.log("Computer chose "+row+","+col);
-            board.setSquare(row, col, 'X');
+            board.setSquareValue(row, col, 'X');
             this.endTurn();
         },
 
