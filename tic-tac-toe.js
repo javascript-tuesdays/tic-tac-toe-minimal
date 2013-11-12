@@ -1,47 +1,26 @@
 
-function Board($board) {
-    this.$board = $board;
-    // Collect the board elements (squares) into a 2D array, and store in this.rows.
-    var $squares = $(".square");
-    var rows = [];
-    var i = 0;
-    for (var row=0; row<3; row++) {
-        var thisRow = [];
-        for (var col=0; col<3; col++) {
-            thisRow.push( $squares.eq(i) );
-            i++;
-        }
-        rows.push(thisRow);
-    }
-    this.rows = rows;
+function Board() {
+    // ...
 }
 
 Board.prototype.emptyBoard = function(){
-    for (var row=0; row<3; row++) {
-        for (var col=0; col<3; col++) {
-            this.setSquareValue(row,col,'-');
-        }
-    }
+    // ...
 };
 
 Board.prototype.setSquareValue = function(row,col,val){
-    this.getSquareElement(row,col).text(val);
+    // ...
 };
 
 Board.prototype.getSquareValue = function(row,col){
-    return this.getSquareElement(row,col).text();
+    // ...
 };
 
 Board.prototype.getSquareElement = function(row,col){
-    return this.rows[row][col];
+    // ...
 };
 
 Board.prototype.isEmpty = function(row,col){
-    return this.isElementEmpty( this.getSquareElement(row,col) );
-};
-
-Board.prototype.isElementEmpty = function($square){
-    return $square.text() == "-";
+    // ...
 };
 
 Board.prototype.isBoardFull = function(){
@@ -188,19 +167,10 @@ function Game() {
         endTurn: function(){
 
             // Is there a winner now?
-            var winner = board.lookForWinner();
-            if (winner) {
-                $instructions.text("Player "+winner+" has won!");
-                this.endGame();
-                return;
-            }
+            // ...
 
-            // Is the board full?
-            if (board.isBoardFull()) {
-                $instructions.text("Game over.  There was no winner.");
-                this.endGame();
-                return;
-            }
+            // Is the board full?  If so, the game is over and there was no winner.
+            // ...
 
             // Otherwise we proceed to the next turn
             whichPlayer = (whichPlayer + 1) % 2;
@@ -209,9 +179,11 @@ function Game() {
         },
 
         endGame: function(){
-            setTimeout( function(){
-                game.startNewGame();
-            }, 4000);
+            // The results of the game have already been presented.
+            // Now we will wait to start a new game.
+            // We could wait for the user to click a (New Game) button.
+            // Or we could just automatically start a new game, after a timeout.
+            // ...
         }
 
     };
