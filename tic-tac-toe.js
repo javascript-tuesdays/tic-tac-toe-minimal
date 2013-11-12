@@ -40,6 +40,86 @@ Board.prototype.isElementEmpty = function($square){
     return $square.text() == "-";
 };
 
+Board.prototype.contentsOfSquare = function(row,col){
+    return this.getSquare(row,col).text();
+};
+
+Board.prototype.isBoardFull = function(){
+    var isFull = true;
+    for (var row=0; row<3; row++) {
+        for (var col=0; col<3; col++) {
+            if (this.isEmpty(row,col)) {
+                isFull = false;
+            }
+        }
+    }
+    return isFull;
+};
+
+// These following are specific to the rules of tic-tac-toe, so could go in a 'rules' object.
+
+Board.prototype.lookForWinner = function(){
+    var players = ["O", "X"];
+    for (var player=0; player<players.length; player++) {
+        var mark = players[player];
+        for (var row=0; row<3; row++) {
+            if (this.playerOwnsRow(row, mark)) {
+                return mark;
+            }
+        }
+        for (var col=0; col<3; col++) {
+            if (this.playerOwnsColumn(col, mark)) {
+                return mark;
+            }
+        }
+        if (this.playerOwnsFirstDiagonal(mark)) {
+            return mark;
+        }
+        if (this.playerOwnsSecondDiagonal(mark)) {
+            return mark;
+        }
+    }
+    return null;
+};
+
+Board.prototype.playerOwnsRow = function(row, mark){
+    for (var col=0; col<3; col++){
+        if (this.contentsOfSquare(row,col) != mark) {
+            return false;
+        }
+    }
+    return true;
+};
+
+Board.prototype.playerOwnsColumn = function(col, mark){
+    for (var row=0; row<3; row++){
+        if (this.contentsOfSquare(row,col) != mark) {
+            return false;
+        }
+    }
+    return true;
+};
+
+Board.prototype.playerOwnsFirstDiagonal = function(mark){
+    for (var row=0; row<3; row++){
+        var col = row;
+        if (this.contentsOfSquare(row,col) != mark) {
+            return false;
+        }
+    }
+    return true;
+};
+
+Board.prototype.playerOwnsSecondDiagonal = function(mark){
+    for (var row=0; row<3; row++){
+        var col = 2 - row;
+        if (this.contentsOfSquare(row,col) != mark) {
+            return false;
+        }
+    }
+    return true;
+};
+
 
 
 function Game() {
@@ -106,17 +186,32 @@ function Game() {
         },
 
         endTurn: function(){
-            // TODO: Is there a winner now?
-            // ...
-            // TODO: Is the board full?  If so, there was no winner.
-            // ...
+
+            // Is there a winner now?
+            var winner = board.lookForWinner();
+            if (winner) {
+                $instructions.text("Player "+winner+" has won!");
+                this.endGame();
+                return;
+            }
+
+            // Is the board full?
+            if (board.isBoardFull()) {
+                $instructions.text("Game over.  There was no winner.");
+                this.endGame();
+                return;
+            }
+
+            // Otherwise we proceed to the next turn
             whichPlayer = (whichPlayer + 1) % 2;
             this.startNextTurn();
+
         },
 
         endGame: function(){
-            // After presenting the results of the game, wait for a user click and start a new game.
-            // ... this.startNewGame();
+            setTimeout( function(){
+                game.startNewGame();
+            }, 4000);
         }
 
     };
